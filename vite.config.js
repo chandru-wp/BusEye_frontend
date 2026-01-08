@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
-  base: './', // Crucial for GH Pages relative paths
+  base: './', // Explicit GitHub Pages base path
   plugins: [
     react(), tailwindcss(),
     VitePWA({
