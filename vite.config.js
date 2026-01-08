@@ -9,22 +9,19 @@ export default defineConfig({
     react(), tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['buseye_logo.png'],
       manifest: {
-        name: 'Online Bus Tracker',
-        short_name: 'BusTracker',
+        name: 'BusEye - Real-time Bus Tracker',
+        short_name: 'BusEye',
         description: 'Real-time bus tracking application',
-        theme_color: '#ffffff',
+        theme_color: '#2563eb',
+        background_color: '#ffffff',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
+            src: 'buseye_logo.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any maskable'
           }
         ]
       }
