@@ -60,19 +60,6 @@ const Register = () => {
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">I am a...</label>
-                        <select
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
-                            value={formData.role}
-                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                        >
-                            <option value="USER">Passenger</option>
-                            <option value="DRIVER">Bus Driver</option>
-                            <option value="ADMIN">Administrator</option>
-                        </select>
-                    </div>
-
                     <button
                         className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition-colors duration-200 mt-2"
                     >
