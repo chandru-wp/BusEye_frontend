@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://<YOUR_GITHUB_USERNAME>.github.io/Online_bus_tracker",
+  "homepage": "https://chandru-wp.github.io/BusEye_frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
