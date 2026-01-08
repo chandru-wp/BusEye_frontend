@@ -1,1 +1,12 @@
  @import "tailwindcss";
+
+ /* Ensure Leaflet maps fill their containers completely */
+ .leaflet-container {
+   height: 100% !important;
+   width: 100% !important;
+ }
+
+ /* Remove any default margins/padding from map parents */
+ .leaflet-container * {
+   box-sizing: border-box;
+ }

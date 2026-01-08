@@ -9,6 +9,7 @@ export default function AdminDashboard() {
     const [center, setCenter] = useState([20.5937, 78.9629]);
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
+    const [selectedBus, setSelectedBus] = useState(null);
 
     const fetchBuses = async () => {
         try {
@@ -73,17 +74,42 @@ export default function AdminDashboard() {
         }
     };
 
-    const markers = buses
-        .filter(bus => bus.latitude && bus.longitude)
-        .map(bus => ({
-            lat: bus.latitude,
-            lng: bus.longitude,
-            type: 'active',
-            popupText: `Bus: ${bus.busNo}`
-        }));
+    const handleBusClick = (bus) => {
+        if (bus.latitude && bus.longitude) {
+            setSelectedBus(bus);
+            setCenter([bus.latitude, bus.longitude]);
+            setIsFullScreen(true); // Auto-open fullscreen when clicking a bus
+        } else {
+            alert(`Bus ${bus.busNo} is not currently sharing location`);
+        }
+    };
+
+    const handleClearSelection = () => {
+        setSelectedBus(null);
+        setCenter([20.5937, 78.9629]); // Reset to India center
+    };
+
+    // Show only selected bus if one is selected, otherwise show all buses
+    const markers = selectedBus
+        ? (selectedBus.latitude && selectedBus.longitude
+            ? [{
+                lat: selectedBus.latitude,
+                lng: selectedBus.longitude,
+                type: 'active',
+                popupText: `🚍 Bus: ${selectedBus.busNo} - ${selectedBus.route}`
+            }]
+            : [])
+        : buses
+            .filter(bus => bus.latitude && bus.longitude)
+            .map(bus => ({
+                lat: bus.latitude,
+                lng: bus.longitude,
+                type: 'active',
+                popupText: `🚍 Bus: ${bus.busNo}`
+            }));
 
     return (
-        <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="min-h-screen bg-gray-50 p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-6">
                 <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
 
@@ -194,20 +220,46 @@ export default function AdminDashboard() {
                             required />
                         <button className="bg-green-600 text-white px-4 py-2 rounded font-medium">Add</button>
                     </form>
+
+                    {selectedBus && (
+                        <div className="bg-blue-50 border-2 border-blue-300 p-3 rounded-lg flex justify-between items-center">
+                            <span className="text-blue-800 font-semibold">📍 Viewing: {selectedBus.busNo}</span>
+                            <button
+                                onClick={handleClearSelection}
+                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold transition-colors"
+                            >
+                                Show All Buses
+                            </button>
+                        </div>
+                    )}
+
                     <ul className="space-y-2 max-h-60 overflow-y-auto">
                         {buses.map(bus => (
-                            <li key={bus.id} className="border-b py-2 flex justify-between items-center last:border-0">
-                                <span className="font-semibold text-gray-800">{bus.busNo} <span className="font-normal text-gray-500 text-sm">({bus.route})</span></span>
-                                <span className="text-xs text-gray-400 font-mono bg-gray-100 px-2 py-1 rounded">{bus.id}</span>
+                            <li
+                                key={bus.id}
+                                onClick={() => handleBusClick(bus)}
+                                className={`border-b py-3 px-3 flex justify-between items-center last:border-0 rounded-lg cursor-pointer transition-all ${selectedBus?.id === bus.id
+                                    ? 'bg-blue-100 border-blue-300 shadow-md'
+                                    : 'hover:bg-gray-50 hover:shadow-sm'
+                                    } ${bus.latitude && bus.longitude ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-gray-300 opacity-60'}`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="text-2xl">{bus.latitude && bus.longitude ? '🟢' : '⚫'}</span>
+                                    <div>
+                                        <span className="font-semibold text-gray-800 block">{bus.busNo}</span>
+                                        <span className="font-normal text-gray-500 text-sm">{bus.route}</span>
+                                    </div>
+                                </div>
+                                <span className="text-xs text-gray-400 font-mono bg-gray-100 px-2 py-1 rounded">{bus.id.slice(-6)}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
 
-            <div className={`transition-all duration-300 ${isFullScreen ? 'fixed inset-0 z-50 bg-white' : 'h-full'}`}>
-                <div className={`bg-white p-4 rounded-xl shadow-lg border border-gray-200 flex flex-col ${isFullScreen ? 'h-full' : 'h-[600px] lg:h-full sticky top-4'}`}>
-                    <div className="flex justify-between items-center mb-4 shrink-0">
+            <div className={`transition-all duration-300 ${isFullScreen ? 'fixed inset-0 z-50 bg-white' : ''}`}>
+                <div className={`bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col ${isFullScreen ? 'h-full p-0 rounded-none border-0' : 'p-4 h-[calc(100vh-2rem)] sticky top-4'}`}>
+                    <div className={`flex justify-between items-center shrink-0 ${isFullScreen ? 'p-4 mb-0 bg-white border-b border-gray-200' : 'mb-4'}`}>
                         <h2 className="text-xl font-bold text-gray-700">Live Services Map</h2>
                         <button
                             onClick={() => setIsFullScreen(!isFullScreen)}
@@ -216,7 +268,7 @@ export default function AdminDashboard() {
                             {isFullScreen ? "✖ Exit" : "⛶ Fullscreen"}
                         </button>
                     </div>
-                    <div className="flex-1 rounded-lg overflow-hidden border border-gray-300 relative min-h-0">
+                    <div className={`flex-1 overflow-hidden relative min-h-0 ${isFullScreen ? 'rounded-none border-0' : 'rounded-lg border border-gray-300'}`}>
                         <MapComponent center={center} markers={markers} />
                     </div>
                 </div>
