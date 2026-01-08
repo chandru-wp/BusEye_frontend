@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://chandru-wp.github.io/BusEye_frontend",
+  "homepage": "https://bus-tk.chandrukannan.me/BusEye_frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
