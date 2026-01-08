@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/BusEye_frontend/', // Explicit GitHub Pages base path
+  base: '/', // Custom domain uses root path
   plugins: [
     react(), tailwindcss(),
     VitePWA({
