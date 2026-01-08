@@ -59,12 +59,19 @@ export default function DriverDashboard() {
 
                 if (selectedBusId) {
                     setStatus("Broadcasting Location to Users");
+                    console.log("📡 Driver: Sending location update:", { busId: selectedBusId, lat, lng });
                     // Send update to backend
                     api.put("/bus/location", {
                         busId: selectedBusId,
                         latitude: lat,
                         longitude: lng
-                    }).catch(err => console.error("Failed to update location", err));
+                    })
+                        .then(response => {
+                            console.log("✅ Driver: Location update successful:", response.data);
+                        })
+                        .catch(err => {
+                            console.error("❌ Driver: Failed to update location", err);
+                        });
                 } else {
                     setStatus("GPS Active (Not Broadcasting - Select Bus to Share)");
                 }

@@ -6,6 +6,8 @@ const api = axios.create({
     : "http://localhost:5000/api",
 });
 
+console.log("🌐 API Base URL:", import.meta.env.PROD ? "PRODUCTION (Render)" : "DEVELOPMENT (localhost:5000)");
+
 // Automatically attach token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");

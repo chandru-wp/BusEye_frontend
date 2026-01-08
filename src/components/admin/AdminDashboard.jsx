@@ -13,9 +13,11 @@ export default function AdminDashboard() {
     const fetchBuses = async () => {
         try {
             const res = await api.get("/bus");
+            console.log("📊 Admin: Fetched buses:", res.data);
+            console.log("📍 Admin: Buses with location:", res.data.filter(b => b.latitude && b.longitude));
             setBuses(res.data);
         } catch (err) {
-            console.error("Failed to fetch buses", err);
+            console.error("❌ Admin: Failed to fetch buses", err);
         }
     };
 
