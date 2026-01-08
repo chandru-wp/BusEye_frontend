@@ -1,7 +1,9 @@
- import axios from "axios";
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.PROD
+    ? "https://buseye-backend.onrender.com/api"
+    : "http://localhost:5000/api",
 });
 
 // Automatically attach token
